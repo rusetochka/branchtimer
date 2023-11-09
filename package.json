@@ -1,0 +1,89 @@
+{
+  "name": "branch-timer",
+  "displayName": "Branch Timer",
+  "description": "Track the time you switch to each branch",
+  "version": "0.0.1",
+  "author": "Olga Shvanskaia",
+  "engines": {
+    "vscode": "^1.84.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "branch-timer.logBranchSwitch",
+        "title": "Log Branch Switch"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "branch-timer.logBranchSwitch",
+        "key": "ctrl+shift+3",
+        "mac": "cmd+shift+3"
+      }
+    ],
+    "configuration": {
+      "type": "object",
+      "properties": {
+        "branchTimer.logFilePath": {
+          "type": "string",
+          "default": "./log.txt",
+          "description": "Path to the log file where branch switches will be recorded."
+        },
+        "branchTimer.logEntryFormat": {
+          "type": "string",
+          "default": "{prefix}{code} {date} {time}",
+          "description": "Customize the log entry format. Available placeholders: {prefix}, {code}, {date}, {time}."
+        },
+        "branchTimer.prefix": {
+          "type": "string",
+          "default": "MyFancyPrefix-",
+          "description": "Prefix to be added to the log entry."
+        },
+        "branchTimer.excludedBranches": {
+          "type": "array",
+          "default": [
+            "develop"
+          ],
+          "items": {
+            "type": "string"
+          },
+          "description": "Array of branch names to exclude from logging."
+        },
+        "branchTimer.branchCodeRegex": {
+          "type": "string",
+          "default": "MyFancyPrefix-\\d{4}",
+          "description": "Custom regex pattern to match branch codes. Example: MyFancyPrefix-\\d{4}"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.3",
+    "@types/node": "18.x",
+    "@types/vscode": "^1.84.0",
+    "@typescript-eslint/eslint-plugin": "^6.9.0",
+    "@typescript-eslint/parser": "^6.9.0",
+    "@vscode/test-electron": "^2.3.6",
+    "eslint": "^8.52.0",
+    "glob": "^10.3.10",
+    "mocha": "^10.2.0",
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "chmod": "^0.2.1",
+    "simple-git": "^3.20.0"
+  }
+}
