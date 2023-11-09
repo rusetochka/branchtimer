@@ -35,7 +35,7 @@
       "properties": {
         "branchTimer.logFilePath": {
           "type": "string",
-          "default": "./log.txt",
+          "default": "C:/Users/Shvanskaia/branch-timer/out/log.txt",
           "description": "Path to the log file where branch switches will be recorded."
         },
         "branchTimer.logEntryFormat": {

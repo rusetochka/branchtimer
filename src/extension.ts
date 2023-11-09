@@ -4,12 +4,19 @@ const fs = require("fs");
 
 export function activate(context: vscode.ExtensionContext) {
   vscode.commands.executeCommand("branch-timer.logBranchSwitch");
-  const logFilePath = vscode.workspace.getConfiguration('branchTimer').get<string>('logFilePath', './log.txt');
 
   let disposable = vscode.commands.registerCommand(
     "branch-timer.logBranchSwitch",
     () => {
       const workspaceFolders = vscode.workspace.workspaceFolders;
+      const logFilePath = vscode.workspace
+        .getConfiguration("branchTimer")
+        .get<string>("logFilePath", "");
+      const excludedBranches = vscode.workspace
+        .getConfiguration("branchTimer")
+        .get<string[]>("excludedBranches", [""]);
+      console.log("logFilePath: ", logFilePath);
+      console.log("excludedBranches", excludedBranches);
       if (workspaceFolders && workspaceFolders.length > 0) {
         const workspaceFolder = workspaceFolders[0];
         const branchName = execSync("git rev-parse --abbrev-ref HEAD", {
@@ -18,7 +25,7 @@ export function activate(context: vscode.ExtensionContext) {
           .toString()
           .trim();
 
-        if (branchName.toLowerCase() !== "develop") {
+        if (!excludedBranches.includes(branchName.toLowerCase())) {
           const config = vscode.workspace.getConfiguration("branchTimer");
           const customBranchCodeRegex = config.get<string>(
             "branchCodeRegex",
@@ -29,7 +36,7 @@ export function activate(context: vscode.ExtensionContext) {
 
           if (regex.test(branchName)) {
             const config = vscode.workspace.getConfiguration("branchTimer");
-            const prefix = config.get<string>('prefix', '');
+            const prefix = config.get<string>("prefix", "");
 
             const sealCodeMatch = branchName.match(/\d{4}/);
             const code = sealCodeMatch ? sealCodeMatch[0] : branchName;
