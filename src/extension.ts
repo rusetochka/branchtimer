@@ -1,13 +1,10 @@
 import * as vscode from "vscode";
 const { execSync } = require("child_process");
 const fs = require("fs");
-const path = require("path");
-
-const logFileName = "log.txt";
-const logFilePath = path.join(__dirname, logFileName);
 
 export function activate(context: vscode.ExtensionContext) {
   vscode.commands.executeCommand("branch-timer.logBranchSwitch");
+  const logFilePath = vscode.workspace.getConfiguration('branchTimer').get<string>('logFilePath', './log.txt');
 
   let disposable = vscode.commands.registerCommand(
     "branch-timer.logBranchSwitch",

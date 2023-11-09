@@ -4,7 +4,7 @@ Branch Timer is a Visual Studio Code extension that allows you to log branch swi
 
 ## Features
 
-- **Manual Logging:** You can log branch switches by clicking CTRL + Shift + 3 with the format "SEAL-XXXX DATE TIME" in a specified log file.
+- **Manual Logging:** You can log branch switches by clicking CTRL + Shift + 3 with the format "MyFancyPrefix-XXXX DATE TIME" in a specified log file.
 - **Customizable Log Format:** Customize the log entry format to match your preferences.
 - **Exclude Specific Branches:** Exclude specific branches (e.g., "develop") from being logged.
 
@@ -28,11 +28,11 @@ Branch Timer is a Visual Studio Code extension that allows you to log branch swi
 
 - `branchTimer.logEntryFormat`: Customize the log entry format. Available placeholders: `{prefix}`, `{code}`, `{date}`, `{time}`. Default value: `"{prefix}{code} {date} {time}"`.
 
-- `branchTimer.prefix`: Prefix to be added to the log entry. Default value: `"SEAL-"`.
+- `branchTimer.prefix`: Prefix to be added to the log entry. Default value: `"MyFancyPrefix-"`.
 
 - `branchTimer.excludedBranches`: Array of branch names to exclude from logging. Default value: `["develop"]`.
 
-- `branchTimer.branchCodeRegex`: Custom regex pattern to match branch codes. Example: `seal-\\d{4}`. Default value: `"seal-\\d{4}"`.
+- `branchTimer.branchCodeRegex`: Custom regex pattern to match branch codes. Example: `MyFancyPrefix-\\d{4}`. Default value: `"MyFancyPrefix-\\d{4}"`.
 
 ## Requirements
 
