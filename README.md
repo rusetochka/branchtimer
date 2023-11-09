@@ -14,7 +14,7 @@ Branch Timer is a Visual Studio Code extension that allows you to log branch swi
    - Search for "Branch Timer" in the VS Code Extensions view and install it.
 
 2. **Configure the Log File:**
-   - By default, the extension logs branch switches in a file named `log.txt` within the extension directory. You can customize the log file path in the extension settings.
+   - You can set up the log file path in the extension settings.
 
 3. **Switch Branches:**
    - Whenever you switch branches in your Git repository, call the logging function by clicking CTRL + SHIFT + 3 to log the branch name and timestamp in the specified log file.
@@ -24,7 +24,7 @@ Branch Timer is a Visual Studio Code extension that allows you to log branch swi
 
 ## Extension Settings
 
-- `branchTimer.logFilePath`: Path to the log file where branch switches will be recorded. Default value: `./log.txt`.
+- `branchTimer.logFilePath`: Path to the log file where branch switches will be recorded.
 
 - `branchTimer.logEntryFormat`: Customize the log entry format. Available placeholders: `{prefix}`, `{code}`, `{date}`, `{time}`. Default value: `"{prefix}{code} {date} {time}"`.
 

@@ -51,7 +51,7 @@
         "branchTimer.excludedBranches": {
           "type": "array",
           "default": [
-            "develop"
+            "develop", "master", "main"
           ],
           "items": {
             "type": "string"
