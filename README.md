@@ -47,3 +47,7 @@ Branch Timer is a Visual Studio Code extension that allows you to log branch swi
 ### 1.0.0
 
 - Initial release of Branch Timer.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.txt](LICENSE.txt) file for details.
