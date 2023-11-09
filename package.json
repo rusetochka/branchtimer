@@ -4,6 +4,10 @@
   "description": "Track the time you switch to each branch",
   "version": "0.0.1",
   "author": "Olga Shvanskaia",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rusetochka/branchtimer.git"
+  },
   "engines": {
     "vscode": "^1.84.0"
   },
