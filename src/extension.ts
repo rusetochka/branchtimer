@@ -2,21 +2,21 @@ import * as vscode from "vscode";
 const { execSync } = require("child_process");
 const fs = require("fs");
 
-export function activate(context: vscode.ExtensionContext) {
-  vscode.commands.executeCommand("branch-timer.logBranchSwitch");
+import { getFormattedDate, calculateBranchTimesFromFile } from "./utils";
 
-  let disposable = vscode.commands.registerCommand(
+const config = vscode.workspace.getConfiguration("branchTimer");
+const logFilePath = config.get<string>("logFilePath", "");
+const customBranchCodeRegex = config.get<string>("branchCodeRegex", "");
+const excludedBranches = config.get<string[]>("excludedBranches", [""]);
+const prefix = config.get<string>("prefix", "");
+
+export function activate(context: vscode.ExtensionContext) {
+  // Command to log branch switch
+  const logBranchSwitchDisposable = vscode.commands.registerCommand(
     "branch-timer.logBranchSwitch",
     () => {
       const workspaceFolders = vscode.workspace.workspaceFolders;
-      const logFilePath = vscode.workspace
-        .getConfiguration("branchTimer")
-        .get<string>("logFilePath", "");
-      const excludedBranches = vscode.workspace
-        .getConfiguration("branchTimer")
-        .get<string[]>("excludedBranches", [""]);
-      console.log("logFilePath: ", logFilePath);
-      console.log("excludedBranches", excludedBranches);
+
       if (workspaceFolders && workspaceFolders.length > 0) {
         const workspaceFolder = workspaceFolders[0];
         const branchName = execSync("git rev-parse --abbrev-ref HEAD", {
@@ -26,17 +26,9 @@ export function activate(context: vscode.ExtensionContext) {
           .trim();
 
         if (!excludedBranches.includes(branchName.toLowerCase())) {
-          const config = vscode.workspace.getConfiguration("branchTimer");
-          const customBranchCodeRegex = config.get<string>(
-            "branchCodeRegex",
-            "seal-\\d{4}"
-          );
-
           const regex = new RegExp(customBranchCodeRegex, "i");
 
           if (regex.test(branchName)) {
-            const config = vscode.workspace.getConfiguration("branchTimer");
-            const prefix = config.get<string>("prefix", "");
 
             const sealCodeMatch = branchName.match(/\d{4}/);
             const code = sealCodeMatch ? sealCodeMatch[0] : branchName;
@@ -55,17 +47,52 @@ export function activate(context: vscode.ExtensionContext) {
     }
   );
 
-  context.subscriptions.push(disposable);
+  // Command to generate report
+  const generateReportDisposable = vscode.commands.registerCommand(
+    "branch-timer.generateReport",
+    () => {
+      calculateBranchTimesFromFile(logFilePath)
+        .then((branchTimes) => {
+          // Display the branch times in a quick pick menu
+          const items = Object.keys(branchTimes).map((branch) => ({
+            label: branch,
+            description: `${branchTimes[branch]}`,
+          }));
+
+          vscode.window.showQuickPick(items, { placeHolder: "Select a branch:" });
+        })
+        .catch((error) => {
+          vscode.window.showErrorMessage(`Error generating report: ${error.message}`);
+        });
+    }
+  );
+
+  //Command to write "Stopped [date time]" into a log
+  const logStoppedEntryDisposable = vscode.commands.registerCommand(
+    "branch-timer.logStoppedEntry",
+    () => {
+      const logEntry = `Stopped ${getFormattedDate()}\n`;
+      fs.appendFileSync(logFilePath, logEntry);
+      vscode.window.showInformationMessage("Logged 'Stopped' entry.");
+    }
+  );
+
+  // Status bar button to trigger the generateReport command
+  const statusBarButton = vscode.window.createStatusBarItem(
+    vscode.StatusBarAlignment.Right,
+    100
+  );
+  statusBarButton.text = "$(file-text) Generate Branch Time Report";
+  statusBarButton.command = "branch-timer.generateReport";
+  statusBarButton.show();
+
+  context.subscriptions.push(logBranchSwitchDisposable);
+  context.subscriptions.push(generateReportDisposable);
+  context.subscriptions.push(logStoppedEntryDisposable);
+  context.subscriptions.push(statusBarButton);
 }
 
-function getFormattedDate() {
-  const currentDate = new Date();
-  const day = currentDate.getDate();
-  const month = currentDate.getMonth() + 1;
-  const year = currentDate.getFullYear();
-  const hours = currentDate.getHours();
-  const minutes = currentDate.getMinutes().toString().padStart(2, "0");
-  return `${day}/${month}/${year} ${hours}:${minutes}`;
+export function deactivate() {
+  const logEntry = `Stopped ${getFormattedDate()}\n`;
+  fs.appendFileSync(logFilePath, logEntry);
 }
-
-export function deactivate() {}

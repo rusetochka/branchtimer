@@ -21,6 +21,14 @@
       {
         "command": "branch-timer.logBranchSwitch",
         "title": "Log Branch Switch"
+      },
+      {
+        "command": "branch-timer.generateReport",
+        "title": "Generate Branch Time Report"
+      },
+      {
+        "command": "branch-timer.logStoppedEntry",
+        "title": "Log Stop Entry"
       }
     ],
     "keybindings": [
@@ -28,6 +36,11 @@
         "command": "branch-timer.logBranchSwitch",
         "key": "ctrl+shift+3",
         "mac": "cmd+shift+3"
+      },
+      {
+        "command": "branch-timer.logStoppedEntry",
+        "key": "ctrl+shift+4", 
+        "mac": "cmd+shift+4"
       }
     ],
     "configuration": {
