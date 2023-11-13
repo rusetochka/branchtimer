@@ -3,6 +3,7 @@
   "displayName": "Branch Timer",
   "description": "Track the time you switch to each branch",
   "version": "0.0.1",
+  "icon": "images/icon.png",
   "author": "Olga Shvanskaia",
   "repository": {
     "type": "git",
